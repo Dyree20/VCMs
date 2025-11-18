@@ -205,6 +205,9 @@
     <div class="home_content">
         <!-- Top bar -->
         <div class="topbar">
+            <button id="sidebarToggle" class="sidebar-toggle-btn" style="display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: white; padding: 5px;">
+                <i class='bx bx-menu'></i>
+            </button>
             <div class="text" id="topbarTitle">
                 @php
                     $currentRoute = Route::currentRouteName();
@@ -580,6 +583,51 @@
 <script src="{{ asset('js/overlay.js') }}"></script>
 <script src="{{ asset('js/payment.js') }}"></script>
 <script>
+    // Sidebar Toggle for Mobile
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggleBtn = document.getElementById('sidebarToggle');
+    let sidebarOverlay = document.querySelector('.sidebar-overlay');
+    
+    // Create overlay if it doesn't exist
+    if (!sidebarOverlay) {
+        sidebarOverlay = document.createElement('div');
+        sidebarOverlay.className = 'sidebar-overlay';
+        document.body.appendChild(sidebarOverlay);
+    }
+    
+    // Toggle sidebar on button click
+    if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        });
+    }
+    
+    // Close sidebar when clicking overlay
+    sidebarOverlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+    });
+    
+    // Close sidebar when clicking a nav link
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+        });
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        }
+    });
+
     // Profile Dropdown Toggle
     const profileDropdownToggle = document.getElementById('profileDropdownToggle');
     const profileDropdown = document.getElementById('profileDropdown');

@@ -126,10 +126,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/enforcer/dashboard', [EnforcerController::class, 'index'])->name('enforcer.dashboard');
     Route::get('/enforcer/summary', [EnforcerController::class, 'getSummary']);
     Route::get('/enforcer/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('enforcer.profile');
+    Route::get('/enforcer/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/enforcer/profile/update', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     
     // Profile Management Routes - For Enforcer specific pages (edit photo, transactions, etc)
-    Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/update-photo', [EnforcerController::class, 'updatePhoto'])->name('profile.update-photo');
     Route::get('/transactions/history', [EnforcerController::class, 'transactionsHistory'])->name('transactions.history');
     Route::get('/notification/settings', [EnforcerController::class, 'notificationSettings'])->name('notification.settings');

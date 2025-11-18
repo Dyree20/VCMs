@@ -5,22 +5,24 @@
 @php
     // Determine the profile route based on user role
     $userRole = $user->role->name ?? 'Admin';
-    $profileEditRoute = match($userRole) {
-        'Front Desk' => 'front-desk.profile.edit',
-        'Enforcer' => 'profile.edit',
-        default => 'admin.profile.edit',
-    };
-    $profileUpdateRoute = match($userRole) {
-        'Front Desk' => 'front-desk.profile.update',
-        'Enforcer' => 'profile.update',
-        default => 'admin.profile.update',
-    };
-    // Determine dashboard route
-    $dashboardRoute = match($userRole) {
-        'Front Desk' => 'front-desk.dashboard',
-        'Enforcer' => 'enforcer.dashboard',
-        default => 'dashboard',
-    };
+    
+    // Try to use the current route name to determine role context
+    $currentRoute = Route::currentRouteName();
+    
+    // Map current route to determine which profile context we're in
+    if (str_contains($currentRoute, 'front-desk')) {
+        $profileEditRoute = 'front-desk.profile.edit';
+        $profileUpdateRoute = 'front-desk.profile.update';
+        $dashboardRoute = 'front-desk.dashboard';
+    } elseif (str_contains($currentRoute, 'enforcer') || $userRole === 'Enforcer') {
+        $profileEditRoute = 'profile.edit';
+        $profileUpdateRoute = 'profile.update';
+        $dashboardRoute = 'enforcer.dashboard';
+    } else {
+        $profileEditRoute = 'admin.profile.edit';
+        $profileUpdateRoute = 'admin.profile.update';
+        $dashboardRoute = 'dashboard';
+    }
 @endphp
 
 @section('content')
@@ -355,6 +357,7 @@
         gap: 24px;
         padding: 32px 24px;
         width: 100%;
+        box-sizing: border-box;
     }
 
     .settings-section {
@@ -363,6 +366,8 @@
         padding: 32px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .section-header {
@@ -386,17 +391,25 @@
         color: #fff;
         margin-bottom: 32px;
         box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     .profile-header-content {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 28px;
+        width: 100%;
+        flex-wrap: nowrap;
     }
 
     .profile-avatar {
         position: relative;
         flex-shrink: 0;
+        min-width: 120px;
+        height: 120px;
     }
 
     .profile-avatar img {
@@ -406,6 +419,7 @@
         border: 4px solid #fff;
         object-fit: cover;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        display: block;
     }
 
     .role-badge {
@@ -421,10 +435,12 @@
         font-weight: 700;
         text-transform: uppercase;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        white-space: nowrap;
     }
 
     .profile-info-section {
         flex: 1;
+        min-width: 0;
     }
 
     .profile-info-section h3 {
@@ -432,17 +448,20 @@
         font-size: 28px;
         font-weight: 700;
         letter-spacing: -0.5px;
+        word-wrap: break-word;
     }
 
     .profile-info-section .location {
         margin: 0;
         font-size: 15px;
         opacity: 0.95;
+        word-wrap: break-word;
     }
 
     .btn-edit {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
         background: rgba(255,255,255,0.2);
         color: #fff;
@@ -454,6 +473,8 @@
         transition: all 0.3s;
         border: 1px solid rgba(255,255,255,0.3);
         white-space: nowrap;
+        flex-shrink: 0;
+        min-height: 44px;
     }
 
     .btn-edit:hover {
@@ -509,6 +530,8 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 32px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .info-item {
@@ -609,6 +632,7 @@
         .settings-sidebar {
             position: static;
             padding: 20px 16px;
+            display: none !important;
         }
 
         .settings-nav {
@@ -644,13 +668,50 @@
 
         .profile-header-content {
             flex-direction: column;
+            align-items: center;
             text-align: center;
-            gap: 20px;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar {
+            min-width: 100px;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .profile-avatar img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .role-badge {
+            font-size: 10px;
+            padding: 6px 12px;
+        }
+
+        .profile-info-section {
+            width: 100%;
+            text-align: center;
+        }
+
+        .profile-info-section h3 {
+            font-size: 22px;
+        }
+
+        .profile-info-section .location {
+            font-size: 14px;
         }
 
         .btn-edit {
             width: 100%;
             justify-content: center;
+            padding: 12px 16px;
         }
 
         .settings-section {
@@ -664,21 +725,158 @@
         .section-header h2 {
             font-size: 20px;
         }
+
+        .section-title {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .link-edit {
+            align-self: flex-start;
+        }
     }
 
     @media (max-width: 480px) {
+        .account-settings-wrapper {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 12px;
+        }
+
         .info-grid {
             grid-template-columns: 1fr;
             gap: 16px;
         }
 
+        .profile-avatar {
+            min-width: 90px;
+            width: 90px;
+            height: 90px;
+        }
+
         .profile-avatar img {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
         }
 
         .profile-info-section h3 {
-            font-size: 22px;
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .profile-info-section .location {
+            font-size: 13px;
+        }
+
+        .profile-header-content {
+            gap: 12px;
+        }
+
+        .btn-edit {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 13px;
+            min-height: 40px;
+        }
+
+        .settings-section {
+            padding: 14px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .profile-card {
+            padding: 14px 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-header {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+        }
+
+        .section-title h4 {
+            font-size: 15px;
+        }
+
+        .info-item label {
+            font-size: 10px;
+        }
+
+        .info-item p {
+            font-size: 14px;
+        }
+
+        .action-buttons {
+            gap: 8px;
+            flex-direction: column;
+            margin-top: 16px;
+            padding-top: 16px;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            justify-content: center;
+            padding: 10px 12px;
+            font-size: 13px;
+        }
+
+        .settings-content {
+            padding: 12px;
+            gap: 12px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .profile-avatar {
+            min-width: 80px;
+            width: 80px;
+            height: 80px;
+        }
+
+        .profile-avatar img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .profile-info-section h3 {
+            font-size: 18px;
+        }
+
+        .section-header h2 {
+            font-size: 16px;
+        }
+
+        .settings-section {
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .profile-card {
+            padding: 10px;
+        }
+
+        .info-item label {
+            font-size: 9px;
+        }
+
+        .info-item p {
+            font-size: 12px;
+        }
+
+        .btn-edit {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+
+        .settings-content {
+            padding: 8px;
+            gap: 8px;
         }
     }
 </style>
