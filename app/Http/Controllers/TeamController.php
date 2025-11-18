@@ -27,7 +27,12 @@ class TeamController extends Controller
     public function create()
     {
         $this->authorize('create', Team::class);
-        $enforcers = User::where('role_id', 2)->where('status_id', 1)->get();
+        // Get enforcers with Enforcer role and Approved status
+        $enforcers = User::where('role_id', 2) // Enforcer role
+                         ->whereHas('status', function($query) {
+                             $query->where('status', 'Approved');
+                         })
+                         ->get();
         return view('admin.teams.create', compact('enforcers'));
     }
 
@@ -75,8 +80,11 @@ class TeamController extends Controller
             $query->with('role');
         }]);
         
-        $availableEnforcers = User::where('role_id', 2)
-                                  ->where('status_id', 1)
+        // Get available enforcers with Approved status
+        $availableEnforcers = User::where('role_id', 2) // Enforcer role
+                                  ->whereHas('status', function($query) {
+                                      $query->where('status', 'Approved');
+                                  })
                                   ->whereNotIn('id', $team->members->pluck('id'))
                                   ->get();
         
@@ -90,7 +98,12 @@ class TeamController extends Controller
     {
         $this->authorize('update', $team);
         $team->load(['members']);
-        $enforcers = User::where('role_id', 2)->where('status_id', 1)->get();
+        // Get enforcers with Approved status
+        $enforcers = User::where('role_id', 2) // Enforcer role
+                         ->whereHas('status', function($query) {
+                             $query->where('status', 'Approved');
+                         })
+                         ->get();
         
         return view('admin.teams.edit', compact('team', 'enforcers'));
     }
