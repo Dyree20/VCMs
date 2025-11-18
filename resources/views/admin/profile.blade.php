@@ -410,6 +410,10 @@
         flex-shrink: 0;
         min-width: 120px;
         height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
     }
 
     .profile-avatar img {
@@ -420,6 +424,7 @@
         object-fit: cover;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         display: block;
+        flex-shrink: 0;
     }
 
     .role-badge {
@@ -676,18 +681,15 @@
         }
 
         .profile-avatar {
-            min-width: 100px;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            min-width: 110px;
+            width: 110px;
+            height: 110px;
             margin: 0 auto;
         }
 
         .profile-avatar img {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
         }
 
         .role-badge {
@@ -750,14 +752,14 @@
         }
 
         .profile-avatar {
-            min-width: 90px;
-            width: 90px;
-            height: 90px;
+            min-width: 100px;
+            width: 100px;
+            height: 100px;
         }
 
         .profile-avatar img {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
         }
 
         .profile-info-section h3 {
@@ -834,14 +836,14 @@
 
     @media (max-width: 360px) {
         .profile-avatar {
-            min-width: 80px;
-            width: 80px;
-            height: 80px;
+            min-width: 90px;
+            width: 90px;
+            height: 90px;
         }
 
         .profile-avatar img {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
         }
 
         .profile-info-section h3 {

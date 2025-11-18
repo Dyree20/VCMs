@@ -447,21 +447,27 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        max-width: 100%;
+        overflow: hidden;
     }
 
     .profile-avatar {
         width: 38px;
         height: 38px;
+        min-width: 38px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid rgba(255, 255, 255, 0.3);
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        flex-shrink: 0;
     }
 
     .profile-text-wrapper {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        min-width: 0;
+        overflow: hidden;
     }
 
     .profile-name {
@@ -469,12 +475,20 @@
         font-weight: 600;
         color: #ffffff;
         line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
 
     .profile-role {
         font-size: 11px;
         color: rgba(255, 255, 255, 0.8);
         margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
 
     #dropdownChevron {
@@ -577,6 +591,209 @@
 
     .profile-dropdown-container:hover {
         opacity: 0.9;
+    }
+
+    /* Responsive Profile Styles */
+    @media (max-width: 1024px) {
+        .profile-dropdown-container {
+            padding: 8px 10px;
+            gap: 8px;
+        }
+
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+        }
+
+        .profile-name {
+            font-size: 13px;
+        }
+
+        .profile-role {
+            font-size: 10px;
+        }
+
+        #dropdownChevron {
+            font-size: 16px;
+        }
+
+        .profile-dropdown {
+            width: 260px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .profile-dropdown-container {
+            padding: 6px 8px;
+            gap: 6px;
+        }
+
+        .profile-avatar {
+            width: 34px;
+            height: 34px;
+        }
+
+        .profile-info-wrapper {
+            gap: 6px;
+        }
+
+        .profile-name {
+            font-size: 12px;
+        }
+
+        .profile-role {
+            font-size: 9px;
+            display: none;
+        }
+
+        #dropdownChevron {
+            font-size: 14px;
+        }
+
+        .profile-dropdown {
+            width: 240px;
+            right: -10px;
+        }
+
+        .dropdown-header {
+            padding: 12px;
+        }
+
+        .dropdown-item {
+            padding: 10px 12px;
+            font-size: 13px;
+        }
+
+        .dropdown-item i {
+            font-size: 18px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-dropdown-container {
+            padding: 5px 6px;
+            gap: 4px;
+        }
+
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+        }
+
+        .profile-info-wrapper {
+            gap: 4px;
+        }
+
+        .profile-name {
+            font-size: 11px;
+        }
+
+        .profile-role {
+            display: none;
+        }
+
+        #dropdownChevron {
+            font-size: 12px;
+        }
+
+        .profile-dropdown {
+            width: 220px;
+            right: -5px;
+        }
+
+        .dropdown-header {
+            padding: 10px;
+        }
+
+        .dropdown-header img {
+            width: 40px !important;
+            height: 40px !important;
+        }
+
+        .dropdown-header div {
+            min-width: 0;
+        }
+
+        .dropdown-header div div:first-child {
+            font-size: 12px;
+        }
+
+        .dropdown-header div div:last-child {
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-item {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+
+        .dropdown-item i {
+            font-size: 16px;
+        }
+
+        .dropdown-item span {
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .profile-dropdown-container {
+            padding: 4px 4px;
+            gap: 2px;
+        }
+
+        .profile-avatar {
+            width: 30px;
+            height: 30px;
+        }
+
+        .profile-name {
+            font-size: 10px;
+        }
+
+        #dropdownChevron {
+            font-size: 10px;
+        }
+
+        .profile-dropdown {
+            width: 200px;
+            right: 0;
+            font-size: 11px;
+        }
+
+        .dropdown-header {
+            padding: 8px;
+        }
+
+        .dropdown-header img {
+            width: 35px !important;
+            height: 35px !important;
+        }
+
+        .dropdown-item {
+            padding: 6px 8px;
+            font-size: 11px;
+        }
+
+        .dropdown-item i {
+            font-size: 14px;
+            min-width: 18px;
+        }
+
+        .dropdown-item span {
+            font-size: 11px;
+        }
+
+        .profile-text-wrapper {
+            display: none;
+        }
+
+        .profile-info-wrapper {
+            gap: 0;
+        }
     }
 </style>
 
